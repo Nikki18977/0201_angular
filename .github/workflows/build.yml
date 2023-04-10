@@ -1,33 +1,28 @@
 name: Build
-
 on:
   push:
     branches: 
       - main
-
+      
 jobs:
-
   lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: lint
+      - name: Container build for lint
         run: docker buildx build -t app:lint -f Dockerfile.lint .
-      - name: run conteaner app-lint
+      - name: Conteaner run app-lint
         run: docker run --name app-lint --rm  app:lint
-
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: test
+      - name: Container build for test
         run: docker buildx build -t app:test -f Dockerfile.test .
-      - name: run conteaner app-test
-        run: docker run --name app-test --rm  app:test
-       
-     
+      - name: Container run app-test
+        run: docker run --name app-test --rm  app:test  
   build:
     runs-on: ubuntu-latest
     steps:
