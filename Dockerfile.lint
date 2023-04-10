@@ -1,0 +1,8 @@
+FROM node:18-buster-slim
+LABEL org.opencontainers.image.source="https://github.com/Nikki18977/0201_angular"
+ENV NG_CLI_ANALYTICS="false"
+
+WORKDIR /app
+COPY . .
+
+CMD ["npm", "lint"]

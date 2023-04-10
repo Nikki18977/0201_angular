@@ -1,0 +1,6 @@
+.vscode
+.git*
+*.md
+Dockerfile*
+
+**/node_modules/

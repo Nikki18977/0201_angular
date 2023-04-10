@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: lint
+        uses: docker buildx build -t app:lint -f Dockerfile.lint .
+      - name: run conteaner app-lint
+        uses: docekr run --name app-lint --rm  app:lint
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: test
+        uses: docker buildx build -t app:test -f Dockerfile.test .
+      - name: run conteaner app-test
+        uses: docekr run --name app-test --rm  app:test
+       
+     
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build & push Docker image 
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: storybook
+          dockerfile: Dockerfile.storybook
+          tags: latest
+          enableBuildKit: true
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}

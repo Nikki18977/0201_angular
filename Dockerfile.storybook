@@ -1,0 +1,16 @@
+FROM node:18-buster-slim as build
+LABEL org.opencontainers.image.source="https://github.com/Nikki18977/0201_angular"
+
+ENV NG_CLI_ANALYTICS="false" 
+ENV PATH=$PATH:/app/node_modules/.bin/ 
+
+WORKDIR /app
+COPY . .
+
+RUN npm install &&\
+    npm run build-storybook
+
+FROM nginx:1.22
+COPY --from=build /app/storybook-static /usr/share/nginx/html
+RUN sed -i 's|octet-stream|javascript|' /etc/nginx/nginx.conf
+EXPOSE 8080
